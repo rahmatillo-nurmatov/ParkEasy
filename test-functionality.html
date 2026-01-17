@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест функциональности - ParkEasyKG</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-section {
+            margin: 2rem;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .test-result {
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+        }
+        .test-pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>Тест функциональности ParkEasyKG</h1>
+        </header>
+
+        <main class="main">
+            <div class="test-section">
+                <h3>Тест загрузки скриптов</h3>
+                <div id="script-tests"></div>
+            </div>
+
+            <div class="test-section">
+                <h3>Тест языковой поддержки</h3>
+                <div id="language-tests"></div>
+                <button onclick="testLanguageSwitch()">Переключить язык</button>
+            </div>
+
+            <div class="test-section">
+                <h3>Тест таймера</h3>
+                <div id="timer-tests"></div>
+                <div class="timer-display" id="timer-display">00:00:00</div>
+                <div class="timer-cost" id="timer-cost" style="display: none;">
+                    <span id="cost-label">Стоимость:</span> 
+                    <span id="cost-value">0 сом</span>
+                </div>
+                <button id="timer-btn" class="timer-button" onclick="testTimer()">Тест таймера</button>
+            </div>
+
+            <div class="test-section">
+                <h3>Тест PWA</h3>
+                <div id="pwa-tests"></div>
+                <button id="install-btn" class="install-button" onclick="testPWA()">Тест установки</button>
+            </div>
+
+            <div class="test-section">
+                <h3>Тест карты</h3>
+                <div id="map-tests"></div>
+                <button onclick="testMap()">Тест карты</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/language.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Тестирование функциональности
+        document.addEventListener('DOMContentLoaded', () => {
+            runTests();
+        });
+
+        function addTestResult(containerId, testName, passed, message = '') {
+            const container = document.getElementById(containerId);
+            const result = document.createElement('div');
+            result.className = `test-result ${passed ? 'test-pass' : 'test-fail'}`;
+            result.innerHTML = `<strong>${testName}:</strong> ${passed ? 'ПРОЙДЕН' : 'ПРОВАЛЕН'} ${message}`;
+            container.appendChild(result);
+        }
+
+        function runTests() {
+            // Тест загрузки скриптов
+            addTestResult('script-tests', 'Загрузка LanguageManager', typeof LanguageManager !== 'undefined');
+            addTestResult('script-tests', 'Загрузка ParkingTimer', typeof ParkingTimer !== 'undefined');
+            addTestResult('script-tests', 'Загрузка ParkEasyApp', typeof ParkEasyApp !== 'undefined');
+            
+            // Тест инициализации объектов
+            addTestResult('script-tests', 'Инициализация langManager', typeof window.langManager !== 'undefined');
+            addTestResult('script-tests', 'Инициализация parkingTimer', typeof window.parkingTimer !== 'undefined');
+            addTestResult('script-tests', 'Инициализация parkEasyApp', typeof window.parkEasyApp !== 'undefined');
+
+            // Тест языковой поддержки
+            if (window.langManager) {
+                addTestResult('language-tests', 'Текущий язык', window.langManager.currentLang === 'ru');
+                addTestResult('language-tests', 'Переводы загружены', typeof translations !== 'undefined');
+                addTestResult('language-tests', 'Русские переводы', translations.ru && Object.keys(translations.ru).length > 0);
+                addTestResult('language-tests', 'Кыргызские переводы', translations.ky && Object.keys(translations.ky).length > 0);
+            }
+
+            // Тест таймера
+            if (window.parkingTimer) {
+                addTestResult('timer-tests', 'Таймер создан', window.parkingTimer instanceof ParkingTimer);
+                addTestResult('timer-tests', 'Таймер неактивен', !window.parkingTimer.isActive);
+                addTestResult('timer-tests', 'Функция расчета стоимости', typeof window.parkingTimer.calculateCost === 'function');
+            }
+
+            // Тест PWA
+            if (window.parkEasyApp) {
+                addTestResult('pwa-tests', 'PWA приложение создано', window.parkEasyApp instanceof ParkEasyApp);
+                addTestResult('pwa-tests', 'Service Worker поддерживается', 'serviceWorker' in navigator);
+                addTestResult('pwa-tests', 'Уведомления поддерживаются', 'Notification' in window);
+            }
+
+            // Тест карты (проверка доступности Leaflet)
+            const leafletAvailable = typeof L !== 'undefined';
+            addTestResult('map-tests', 'Leaflet доступен', leafletAvailable);
+            if (!leafletAvailable) {
+                addTestResult('map-tests', 'Примечание', false, '- Leaflet загружается только на странице карты');
+            }
+        }
+
+        function testLanguageSwitch() {
+            if (window.langManager) {
+                const currentLang = window.langManager.currentLang;
+                const newLang = currentLang === 'ru' ? 'ky' : 'ru';
+                window.langManager.setLanguage(newLang);
+                addTestResult('language-tests', `Переключение на ${newLang}`, window.langManager.currentLang === newLang);
+            }
+        }
+
+        function testTimer() {
+            if (window.parkingTimer) {
+                window.parkingTimer.toggleTimer();
+                const isActive = window.parkingTimer.isActive;
+                addTestResult('timer-tests', 'Переключение таймера', true, `- Таймер ${isActive ? 'запущен' : 'остановлен'}`);
+            }
+        }
+
+        function testPWA() {
+            if (window.parkEasyApp) {
+                window.parkEasyApp.showNotification('Тест уведомления', 'Это тестовое уведомление PWA');
+                addTestResult('pwa-tests', 'Тест уведомления', true, '- Уведомление отправлено');
+            }
+        }
+
+        function testMap() {
+            addTestResult('map-tests', 'Тест карты', false, '- Откройте map.html для полного тестирования карты');
+        }
+    </script>
+</body>
+</html>

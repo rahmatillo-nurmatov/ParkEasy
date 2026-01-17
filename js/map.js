@@ -8,16 +8,48 @@ class ParkingMap {
     }
     
     init() {
+        this.showLoadingIndicator();
         this.initMap();
         this.loadParkingData();
         this.setupEventListeners();
+        this.hideLoadingIndicator();
+    }
+    
+    showLoadingIndicator() {
+        const mapContainer = document.getElementById('map');
+        if (mapContainer) {
+            mapContainer.innerHTML = `
+                <div style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    min-height: 300px;
+                    color: #666;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 1rem; animation: spin 2s linear infinite;">🗺️</div>
+                    <div style="font-size: 1.1rem;">Загрузка карты...</div>
+                </div>
+                <style>
+                    @keyframes spin {
+                        from { transform: rotate(0deg); }
+                        to { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+        }
+    }
+    
+    hideLoadingIndicator() {
+        // Индикатор загрузки будет скрыт автоматически при инициализации карты
     }
     
     initMap() {
         // Проверить, загружен ли Leaflet
         if (typeof L === 'undefined') {
             console.error('Leaflet не загружен');
-            document.getElementById('map').innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Карта недоступна. Проверьте подключение к интернету.</div>';
+            this.showMapError('Карта недоступна. Проверьте подключение к интернету.');
             return;
         }
         
@@ -27,13 +59,24 @@ class ParkingMap {
         try {
             this.map = L.map('map').setView(bishkekCenter, 13);
             
-            // Добавить слой карты
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(this.map);
+            // Добавить слой карты с обработкой ошибок
+            const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19,
+                errorTileUrl: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjU2IiBoZWlnaHQ9IjI1NiIgZmlsbD0iI2Y1ZjVmNSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM5OTkiPk5vIGltYWdlPC90ZXh0Pjwvc3ZnPg=='
+            });
+            
+            tileLayer.addTo(this.map);
+            
+            // Обработка ошибок загрузки тайлов
+            tileLayer.on('tileerror', (e) => {
+                console.log('Ошибка загрузки тайла:', e);
+            });
+            
+            console.log('Карта успешно инициализирована');
         } catch (error) {
             console.error('Ошибка инициализации карты:', error);
-            document.getElementById('map').innerHTML = '<div style="padding: 20px; text-align: center; color: #666;">Ошибка загрузки карты</div>';
+            this.showMapError('Ошибка загрузки карты');
             return;
         }
         
@@ -61,6 +104,37 @@ class ParkingMap {
                     console.log('Не удалось получить местоположение:', error);
                 }
             );
+        }
+    }
+    
+    showMapError(message) {
+        const mapContainer = document.getElementById('map');
+        if (mapContainer) {
+            mapContainer.innerHTML = `
+                <div style="
+                    padding: 20px; 
+                    text-align: center; 
+                    color: #666;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    min-height: 300px;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                    <div style="font-size: 1.1rem; margin-bottom: 1rem;">${message}</div>
+                    <button onclick="window.location.reload()" style="
+                        background: #2196F3;
+                        color: white;
+                        border: none;
+                        padding: 0.8rem 1.5rem;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                    ">Попробовать снова</button>
+                </div>
+            `;
         }
     }
     
@@ -454,20 +528,35 @@ class ParkingMap {
     }
     
     addMarkersToMap() {
-        this.parkingData.forEach(parking => {
-            const icon = this.getMarkerIcon(parking.type);
-            
-            const marker = L.marker(parking.coords, { icon })
-                .addTo(this.map)
-                .bindPopup(this.createPopupContent(parking));
-            
-            // Добавить обработчик клика
-            marker.on('click', () => {
-                this.showParkingInfo(parking);
-            });
-            
-            this.markers.push(marker);
+        if (!this.map) {
+            console.error('Карта не инициализирована');
+            return;
+        }
+        
+        console.log(`Добавление ${this.parkingData.length} маркеров на карту`);
+        
+        this.parkingData.forEach((parking, index) => {
+            try {
+                const icon = this.getMarkerIcon(parking.type);
+                
+                const marker = L.marker(parking.coords, { icon })
+                    .addTo(this.map)
+                    .bindPopup(this.createPopupContent(parking));
+                
+                // Добавить обработчик клика
+                marker.on('click', () => {
+                    this.showParkingInfo(parking);
+                });
+                
+                this.markers.push(marker);
+                
+                console.log(`Маркер ${index + 1} добавлен: ${parking.name}`);
+            } catch (error) {
+                console.error(`Ошибка добавления маркера ${parking.name}:`, error);
+            }
         });
+        
+        console.log(`Всего добавлено маркеров: ${this.markers.length}`);
     }
     
     getMarkerIcon(type) {

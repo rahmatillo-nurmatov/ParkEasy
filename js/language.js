@@ -220,6 +220,24 @@ class LanguageManager {
         if (installBtn) {
             installBtn.textContent = translations[this.currentLang]['install-app'];
         }
+        
+        // Обновить метку стоимости
+        const costLabel = document.getElementById('cost-label');
+        if (costLabel) {
+            costLabel.textContent = this.currentLang === 'ru' ? 'Стоимость:' : 'Наркы:';
+        }
+        
+        // Обновить заголовок страницы
+        const pageTitle = document.title;
+        if (pageTitle.includes('ParkEasyKG')) {
+            if (window.location.pathname.includes('map.html')) {
+                document.title = this.currentLang === 'ru' ? 'Карта парковок - ParkEasyKG' : 'Токтотуу жайларынын картасы - ParkEasyKG';
+            } else if (window.location.pathname.includes('fines.html')) {
+                document.title = this.currentLang === 'ru' ? 'Штрафы - ParkEasyKG' : 'Айыптар - ParkEasyKG';
+            } else {
+                document.title = this.currentLang === 'ru' ? 'ParkEasyKG - Парковки Кыргызстана' : 'ParkEasyKG - Кыргызстандын токтотуу жайлары';
+            }
+        }
     }
     
     getText(key) {

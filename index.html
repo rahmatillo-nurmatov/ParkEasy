@@ -8,6 +8,9 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2196F3">
     <link rel="icon" type="image/svg+xml" href="icons/icon-192x192.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ParkEasyKG">
 </head>
 <body>
     <div class="app">
@@ -45,6 +48,46 @@
                 </div>
             </div>
 
+            <div class="menu-grid">
+                <a href="map.html" class="menu-item primary-action">
+                    <div class="menu-icon">🗺️</div>
+                    <h3 id="menu-map">Карта парковок</h3>
+                    <p id="menu-map-desc">Найти парковочные места</p>
+                    <div class="action-badge" id="action-badge">Начать поиск</div>
+                </a>
+
+                <div class="menu-item timer-card" id="timer-card">
+                    <div class="menu-icon">⏱️</div>
+                    <h3 id="menu-timer">Таймер парковки</h3>
+                    <p id="timer-status">Не активен</p>
+                    <div class="timer-display" id="timer-display">00:00:00</div>
+                    <div class="timer-cost" id="timer-cost" style="display: none;">
+                        <span id="cost-label">Стоимость:</span> 
+                        <span id="cost-value">0 сом</span>
+                    </div>
+                    <button id="timer-btn" class="timer-button">Начать парковку</button>
+                </div>
+
+                <a href="fines.html" class="menu-item">
+                    <div class="menu-icon">⚠️</div>
+                    <h3 id="menu-fines">Штрафы</h3>
+                    <p id="menu-fines-desc">Информация о штрафах</p>
+                    <div class="info-badge">Новые данные</div>
+                </a>
+
+                <div class="menu-item install-card" id="install-card">
+                    <div class="menu-icon">📱</div>
+                    <h3 id="menu-install">Установить приложение</h3>
+                    <p id="menu-install-desc">Установить на устройство</p>
+                    <button id="install-btn" class="install-button" style="display: none;">Установить</button>
+                    <div class="pwa-benefits">
+                        <span>✓ Работает офлайн</span>
+                        <span>✓ Быстрый доступ</span>
+                        <span>✓ Уведомления</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="features-section">
                 <h3 id="features-title">Возможности приложения</h3>
                 <div class="features-grid">
@@ -70,58 +113,11 @@
                     </div>
                 </div>
             </div>
-
-            <div class="menu-grid">
-                <a href="map.html" class="menu-item primary-action">
-                    <div class="menu-icon">🗺️</div>
-                    <h3 id="menu-map">Карта парковок</h3>
-                    <p id="menu-map-desc">Найти парковочные места</p>
-                    <div class="action-badge">Начать поиск</div>
-                </a>
-
-                <div class="menu-item timer-card" id="timer-card">
-                    <div class="menu-icon">⏱️</div>
-                    <h3 id="menu-timer">Таймер парковки</h3>
-                    <p id="timer-status">Не активен</p>
-                    <div class="timer-display" id="timer-display">00:00:00</div>
-                    <button id="timer-btn" class="timer-button">Начать парковку</button>
-                </div>
-
-                <a href="fines.html" class="menu-item">
-                    <div class="menu-icon">⚠️</div>
-                    <h3 id="menu-fines">Штрафы</h3>
-                    <p id="menu-fines-desc">Информация о штрафах</p>
-                    <div class="info-badge">Новые данные</div>
-                </a>
-
-                <div class="menu-item install-card" id="install-card">
-                    <div class="menu-icon">📱</div>
-                    <h3 id="menu-install">Установить приложение</h3>
-                    <p id="menu-install-desc">Установить на устройство</p>
-                    <button id="install-btn" class="install-button" style="display: none;">Установить</button>
-                    <div class="pwa-benefits">
-                        <span>✓ Работает офлайн</span>
-                        <span>✓ Быстрый доступ</span>
-                        <span>✓ Уведомления</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="testimonials-section">
-                <h3 id="testimonials-title">Отзывы пользователей</h3>
-                <div class="testimonials-grid">
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"Очень удобно! Больше не получаю штрафы за превышение времени парковки."</div>
-                        <div class="testimonial-author">— Айгуль, Бишкек</div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">"Отличное приложение для туристов. Легко найти парковку в незнакомом городе."</div>
-                        <div class="testimonial-author">— Марат, Алматы</div>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
+
+    <!-- Уведомления -->
+    <div id="notification-container"></div>
 
     <script src="js/language.js"></script>
     <script src="js/timer.js"></script>

@@ -68,11 +68,15 @@ class ParkEasyApp {
         
         if (installBtn) {
             installBtn.style.display = 'block';
+            installBtn.style.opacity = '1';
         }
         
         if (installCard) {
             installCard.style.display = 'block';
+            installCard.style.opacity = '1';
         }
+        
+        console.log('Кнопка установки показана');
     }
     
     hideInstallButton() {
@@ -87,38 +91,53 @@ class ParkEasyApp {
             installCard.style.opacity = '0.5';
             const desc = installCard.querySelector('p');
             if (desc) {
-                desc.textContent = 'Приложение уже установлено';
+                desc.textContent = window.langManager?.currentLang === 'ky' ? 
+                    'Колдонмо орнотулган' : 'Приложение уже установлено';
             }
         }
+        
+        console.log('Кнопка установки скрыта');
     }
     
     async installApp() {
+        console.log('Попытка установки PWA...');
+        
         if (!this.deferredPrompt) {
+            console.log('Нет отложенного события установки');
             // Если нет события установки, показать инструкции
             if (this.isIOS()) {
                 this.showIOSInstallInstructions();
             } else {
-                this.showNotification('Установка недоступна', 'Приложение уже установлено или ваш браузер не поддерживает установку PWA');
+                // Проверить, может ли браузер установить PWA
+                if ('serviceWorker' in navigator && 'BeforeInstallPromptEvent' in window) {
+                    this.showNotification('Установка недоступна', 'Попробуйте позже или используйте меню браузера');
+                } else {
+                    this.showNotification('PWA не поддерживается', 'Ваш браузер не поддерживает установку веб-приложений');
+                }
             }
             return;
         }
         
         try {
+            console.log('Показ диалога установки...');
             this.deferredPrompt.prompt();
             
             const { outcome } = await this.deferredPrompt.userChoice;
+            console.log('Результат установки:', outcome);
             
             if (outcome === 'accepted') {
                 console.log('Пользователь принял установку');
                 this.showNotification('Установка началась', 'Приложение устанавливается...');
+                this.hideInstallButton();
             } else {
                 console.log('Пользователь отклонил установку');
+                this.showNotification('Установка отменена', 'Вы можете установить приложение позже через меню браузера');
             }
             
             this.deferredPrompt = null;
         } catch (error) {
             console.error('Ошибка установки:', error);
-            this.showNotification('Ошибка установки', 'Попробуйте еще раз или установите вручную через меню браузера');
+            this.showNotification('Ошибка установки', 'Попробуйте установить через меню браузера: Меню → Установить приложение');
         }
     }
     

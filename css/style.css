@@ -358,6 +358,27 @@ body {
     text-align: center;
 }
 
+.timer-cost {
+    background: #f8f9fa;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin: 0.5rem 0;
+    text-align: center;
+    border-left: 4px solid #4CAF50;
+}
+
+.timer-cost #cost-label {
+    color: #666;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.timer-cost #cost-value {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
 .timer-button, .install-button, .primary-btn {
     background: #2196F3;
     color: white;
@@ -755,6 +776,157 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     z-index: 1000;
+}
+
+/* Уведомления */
+.notification-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #2196F3;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 10000;
+    max-width: 300px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.notification-content h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.notification-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Статус сети */
+.network-status {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    z-index: 10000;
+    animation: slideDown 0.3s ease-out;
+}
+
+.network-status.success {
+    background: #4CAF50;
+    color: white;
+}
+
+.network-status.warning {
+    background: #FF9800;
+    color: white;
+}
+
+.network-status.info {
+    background: #2196F3;
+    color: white;
+}
+
+/* Обновления приложения */
+.update-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: #2196F3;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    z-index: 10000;
+    animation: slideUp 0.3s ease-out;
+}
+
+.update-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.update-btn {
+    background: white;
+    color: #2196F3;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.dismiss-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* iOS инструкции */
+.ios-install-instructions {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.ios-install-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.ios-install-content h3 {
+    color: #2196F3;
+    margin-bottom: 1rem;
+}
+
+.ios-install-content ol {
+    text-align: left;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.ios-install-content li {
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.close-instructions {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1rem;
+    font-size: 1rem;
 }
 
 /* Анимации */

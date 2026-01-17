@@ -107,6 +107,8 @@ class ParkingTimer {
     updateDisplay() {
         const timerDisplay = document.getElementById('timer-display');
         const timerStatus = document.getElementById('timer-status');
+        const timerCost = document.getElementById('timer-cost');
+        const costValue = document.getElementById('cost-value');
         
         if (!timerDisplay) return;
         
@@ -119,11 +121,23 @@ class ParkingTimer {
                 timerStatus.textContent = window.langManager ? 
                     window.langManager.getText('timer-active') : 'Активен';
             }
+            
+            // Показать и обновить стоимость
+            if (timerCost && costValue) {
+                timerCost.style.display = 'block';
+                const cost = this.calculateCost(elapsed);
+                costValue.textContent = `${cost} сом`;
+            }
         } else {
             timerDisplay.textContent = '00:00:00';
             if (timerStatus) {
                 timerStatus.textContent = window.langManager ? 
                     window.langManager.getText('timer-inactive') : 'Не активен';
+            }
+            
+            // Скрыть стоимость
+            if (timerCost) {
+                timerCost.style.display = 'none';
             }
         }
     }
@@ -276,6 +290,53 @@ class ParkingTimer {
     
     getHistory() {
         return JSON.parse(localStorage.getItem('parkingHistory') || '[]');
+    }
+    
+    // Расчет стоимости парковки
+    calculateCost(milliseconds) {
+        const minutes = Math.floor(milliseconds / (1000 * 60));
+        const hours = Math.ceil(minutes / 60); // Округляем вверх для почасовой оплаты
+        
+        // Получить информацию о выбранной парковке
+        const selectedParking = JSON.parse(localStorage.getItem('selectedParking') || '{}');
+        
+        if (selectedParking.type === 'free') {
+            return 0;
+        }
+        
+        if (selectedParking.type === 'forbidden') {
+            return 'Запрещено';
+        }
+        
+        // Базовая стоимость для платных парковок
+        let costPerHour = 20; // сом по умолчанию
+        
+        // Парсинг стоимости из данных парковки
+        if (selectedParking.cost && selectedParking.cost.includes('сом')) {
+            const match = selectedParking.cost.match(/(\d+)\s*сом/);
+            if (match) {
+                costPerHour = parseInt(match[1]);
+            }
+        }
+        
+        // Если время меньше часа, все равно считаем как час
+        const billableHours = Math.max(1, hours);
+        
+        // Расчет итоговой стоимости
+        const totalCost = billableHours * costPerHour;
+        
+        return totalCost;
+    }
+    
+    // Получить информацию о текущей парковке
+    getCurrentParkingInfo() {
+        const selectedParking = JSON.parse(localStorage.getItem('selectedParking') || '{}');
+        return selectedParking;
+    }
+    
+    // Установить информацию о парковке
+    setParkingInfo(parkingData) {
+        localStorage.setItem('selectedParking', JSON.stringify(parkingData));
     }
 }
 
