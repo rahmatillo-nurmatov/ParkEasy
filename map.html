@@ -25,7 +25,17 @@
             </div>
         </header>
 
-        <div class="map-controls">
+        <div class="map-controls gis-style">
+            <div class="search-container">
+                <input type="text" id="parking-search" placeholder="Поиск парковки..." class="search-input">
+                <button id="search-btn" class="search-btn">🔍</button>
+            </div>
+            <div class="filters-container">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="free">Бесплатные</button>
+                <button class="filter-btn" data-filter="paid">Платные</button>
+                <button class="filter-btn" data-filter="shopping">ТЦ</button>
+            </div>
             <div class="legend">
                 <div class="legend-item">
                     <span class="legend-color free"></span>
@@ -36,8 +46,8 @@
                     <span id="legend-paid">Платно</span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-color forbidden"></span>
-                    <span id="legend-forbidden">Запрещено</span>
+                    <span class="legend-color shopping"></span>
+                    <span>ТЦ</span>
                 </div>
             </div>
         </div>
