@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создание иконок для ParkEasyKG</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-preview { margin: 20px 0; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+        button { padding: 10px 20px; margin: 5px; background: #2196F3; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Генератор иконок ParkEasyKG</h1>
+    <p>Эта страница создает PNG иконки разных размеров для PWA приложения.</p>
+    
+    <div class="icon-preview">
+        <h3>Предварительный просмотр:</h3>
+        <canvas id="preview" width="192" height="192"></canvas>
+    </div>
+    
+    <button onclick="generateAllIcons()">Создать все иконки</button>
+    <button onclick="downloadIcon(192)">Скачать 192x192</button>
+    
+    <div id="downloads"></div>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Очистить canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            // Фон
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#2196F3');
+            gradient.addColorStop(1, '#1976D2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Скругленные углы (совместимый способ)
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            // Используем arc для скругления углов
+            const radius = size * 0.125;
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // Автомобиль
+            const carScale = size / 512;
+            ctx.fillStyle = 'white';
+            
+            // Кузов автомобиля
+            const carX = 128 * carScale;
+            const carY = 200 * carScale;
+            const carWidth = 216 * carScale;
+            const carHeight = 80 * carScale;
+            
+            ctx.beginPath();
+            ctx.rect(carX + 20 * carScale, carY + 40 * carScale, carWidth, carHeight);
+            ctx.fill();
+            
+            // Крыша
+            ctx.beginPath();
+            ctx.rect(carX + 60 * carScale, carY + 20 * carScale, 136 * carScale, 40 * carScale);
+            ctx.fill();
+            
+            // Колеса
+            ctx.fillStyle = '#333';
+            ctx.beginPath();
+            ctx.arc(carX + 60 * carScale, carY + 130 * carScale, 20 * carScale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(carX + 196 * carScale, carY + 130 * carScale, 20 * carScale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Символ P
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.rect(320 * carScale, 120 * carScale, 80 * carScale, 80 * carScale);
+            ctx.fill();
+            
+            // Текст P
+            ctx.fillStyle = '#2196F3';
+            ctx.font = `bold ${48 * carScale}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('P', 360 * carScale, 160 * carScale);
+            
+            // Таймер
+            ctx.strokeStyle = 'white';
+            ctx.fillStyle = 'white';
+            ctx.lineWidth = 4 * carScale;
+            ctx.beginPath();
+            ctx.arc(256 * carScale, 376 * carScale, 48 * carScale, 0, 2 * Math.PI);
+            ctx.stroke();
+            
+            // Стрелки часов
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 3 * carScale;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(256 * carScale, 376 * carScale);
+            ctx.lineTo(256 * carScale, 348 * carScale);
+            ctx.stroke();
+            
+            ctx.lineWidth = 2 * carScale;
+            ctx.beginPath();
+            ctx.moveTo(256 * carScale, 376 * carScale);
+            ctx.lineTo(276 * carScale, 376 * carScale);
+            ctx.stroke();
+            
+            // Центр часов
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(256 * carScale, 376 * carScale, 4 * carScale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Текст KG
+            ctx.fillStyle = 'white';
+            ctx.font = `bold ${32 * carScale}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.fillText('KG', 256 * carScale, 460 * carScale);
+        }
+        
+        function generateAllIcons() {
+            const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+            const downloads = document.getElementById('downloads');
+            downloads.innerHTML = '<h3>Созданные иконки:</h3>';
+            
+            sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                drawIcon(canvas, size);
+                
+                canvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `icon-${size}x${size}.png`;
+                    link.textContent = `Скачать ${size}x${size}`;
+                    link.style.display = 'block';
+                    link.style.margin = '5px 0';
+                    downloads.appendChild(link);
+                });
+            });
+        }
+        
+        function downloadIcon(size) {
+            const canvas = document.createElement('canvas');
+            drawIcon(canvas, size);
+            
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `icon-${size}x${size}.png`;
+                link.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        // Нарисовать превью при загрузке
+        window.onload = function() {
+            const preview = document.getElementById('preview');
+            drawIcon(preview, 192);
+        };
+    </script>
+</body>
+</html>

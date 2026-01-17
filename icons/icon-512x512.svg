@@ -1,0 +1,41 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+    <!-- Фон с градиентом -->
+    <defs>
+        <linearGradient id="bg512" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1976D2;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+    
+    <!-- Скругленный фон -->
+    <rect width="512" height="512" fill="url(#bg512)" rx="64"/>
+    
+    <!-- Белый круг -->
+    <circle cx="256" cy="256" r="170" fill="white"/>
+    
+    <!-- Символ P -->
+    <text x="256" y="310" font-family="Arial, sans-serif" font-size="170" font-weight="bold" text-anchor="middle" fill="#2196F3">P</text>
+    
+    <!-- Автомобиль -->
+    <g transform="translate(360, 360)">
+        <!-- Кузов -->
+        <rect x="0" y="0" width="76" height="48" fill="white" rx="6"/>
+        <!-- Крыша -->
+        <rect x="16" y="-16" width="44" height="24" fill="white" rx="4"/>
+        <!-- Колеса -->
+        <circle cx="16" cy="56" r="8" fill="#333"/>
+        <circle cx="60" cy="56" r="8" fill="#333"/>
+        <!-- Фары -->
+        <circle cx="78" cy="12" r="4" fill="#FFD700"/>
+        <circle cx="78" cy="36" r="4" fill="#FFD700"/>
+    </g>
+    
+    <!-- Таймер -->
+    <g transform="translate(100, 360)">
+        <circle cx="32" cy="32" r="28" fill="white" stroke="#2196F3" stroke-width="3"/>
+        <!-- Стрелки -->
+        <line x1="32" y1="32" x2="32" y2="12" stroke="#2196F3" stroke-width="2" stroke-linecap="round"/>
+        <line x1="32" y1="32" x2="44" y2="32" stroke="#2196F3" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="32" cy="32" r="2" fill="#2196F3"/>
+    </g>
+</svg>

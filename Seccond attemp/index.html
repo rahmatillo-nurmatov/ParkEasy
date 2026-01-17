@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkEasyKG - Парковки Кыргызстана</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    <link rel="icon" type="image/png" href="icons/icon-192x192.png">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1 id="app-title">ParkEasyKG</h1>
+            <div class="language-switcher">
+                <button id="lang-ru" class="lang-btn active">РУС</button>
+                <button id="lang-ky" class="lang-btn">КЫР</button>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="welcome-section">
+                <h2 id="welcome-title">Добро пожаловать в ParkEasyKG</h2>
+                <p id="welcome-text">Найдите парковку, отследите время и узнайте о штрафах в Кыргызстане</p>
+            </div>
+
+            <div class="menu-grid">
+                <a href="map.html" class="menu-item">
+                    <div class="menu-icon">🗺️</div>
+                    <h3 id="menu-map">Карта парковок</h3>
+                    <p id="menu-map-desc">Найти парковочные места</p>
+                </a>
+
+                <div class="menu-item" id="timer-card">
+                    <div class="menu-icon">⏱️</div>
+                    <h3 id="menu-timer">Таймер парковки</h3>
+                    <p id="timer-status">Не активен</p>
+                    <div class="timer-display" id="timer-display">00:00:00</div>
+                    <button id="timer-btn" class="timer-button">Начать парковку</button>
+                </div>
+
+                <a href="fines.html" class="menu-item">
+                    <div class="menu-icon">⚠️</div>
+                    <h3 id="menu-fines">Штрафы</h3>
+                    <p id="menu-fines-desc">Информация о штрафах</p>
+                </a>
+
+                <div class="menu-item" id="install-card">
+                    <div class="menu-icon">📱</div>
+                    <h3 id="menu-install">Установить приложение</h3>
+                    <p id="menu-install-desc">Установить на устройство</p>
+                    <button id="install-btn" class="install-button" style="display: none;">Установить</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/language.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

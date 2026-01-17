@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Создание PNG иконок для GitHub Pages</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; margin: 20px 0; }
+        .icon-item { text-align: center; border: 1px solid #ddd; padding: 10px; border-radius: 8px; }
+        canvas { border: 1px solid #ccc; }
+        button { background: #2196F3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .download-all { background: #4CAF50; font-size: 1.2rem; padding: 15px 30px; }
+    </style>
+</head>
+<body>
+    <h1>🎨 Создание PNG иконок для ParkEasyKG</h1>
+    <p>Эта страница создает все необходимые PNG иконки для GitHub Pages развертывания.</p>
+    
+    <button class="download-all" onclick="createAllIcons()">📦 Создать и скачать все иконки</button>
+    <button onclick="createZipArchive()">📁 Скачать ZIP архив</button>
+    
+    <div id="status"></div>
+    
+    <div class="icon-grid" id="icon-grid"></div>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        let createdIcons = {};
+        
+        function createIcon(size) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Фон с градиентом
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#2196F3');
+            gradient.addColorStop(1, '#1976D2');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Скругленные углы (совместимый способ)
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            const radius = size * 0.125;
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+            
+            // Белый круг
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size/3, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Символ P
+            ctx.fillStyle = '#2196F3';
+            ctx.font = `bold ${size/3}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('P', size/2, size/2);
+            
+            // Добавить небольшой автомобиль (для больших иконок)
+            if (size >= 192) {
+                const carSize = size * 0.15;
+                const carX = size * 0.7;
+                const carY = size * 0.7;
+                
+                // Кузов автомобиля
+                ctx.fillStyle = 'white';
+                ctx.fillRect(carX, carY, carSize, carSize * 0.6);
+                
+                // Колеса
+                ctx.fillStyle = '#333';
+                ctx.beginPath();
+                ctx.arc(carX + carSize * 0.2, carY + carSize * 0.7, carSize * 0.1, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(carX + carSize * 0.8, carY + carSize * 0.7, carSize * 0.1, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+            
+            return canvas;
+        }
+        
+        function createAllIcons() {
+            const grid = document.getElementById('icon-grid');
+            const status = document.getElementById('status');
+            grid.innerHTML = '';
+            status.innerHTML = '<p>🔄 Создание иконок...</p>';
+            
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const canvas = createIcon(size);
+                    
+                    // Создать элемент для отображения
+                    const item = document.createElement('div');
+                    item.className = 'icon-item';
+                    item.innerHTML = `
+                        <h3>${size}x${size}</h3>
+                        <div>${canvas.outerHTML}</div>
+                        <button onclick="downloadIcon(${size})">Скачать</button>
+                    `;
+                    grid.appendChild(item);
+                    
+                    // Сохранить canvas для скачивания
+                    createdIcons[size] = canvas;
+                    
+                    // Обновить статус
+                    status.innerHTML = `<p>✅ Создано иконок: ${index + 1}/${sizes.length}</p>`;
+                    
+                    if (index === sizes.length - 1) {
+                        status.innerHTML += '<p>🎉 Все иконки готовы! Теперь можно скачивать.</p>';
+                    }
+                }, index * 200);
+            });
+        }
+        
+        function downloadIcon(size) {
+            const canvas = createdIcons[size];
+            if (!canvas) {
+                alert('Сначала создайте иконки!');
+                return;
+            }
+            
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}x${size}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        function createZipArchive() {
+            if (Object.keys(createdIcons).length === 0) {
+                alert('Сначала создайте иконки!');
+                return;
+            }
+            
+            // Простая реализация без библиотек - скачаем по одной
+            alert('Скачивание всех иконок по одной (ZIP требует дополнительную библиотеку)');
+            sizes.forEach(size => {
+                if (createdIcons[size]) {
+                    setTimeout(() => downloadIcon(size), size);
+                }
+            });
+        }
+        
+        // Автоматически создать иконки при загрузке
+        window.onload = function() {
+            setTimeout(createAllIcons, 500);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Штрафы - ParkEasyKG</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <h1 id="fines-title">Штрафы за парковку</h1>
+            <div class="language-switcher">
+                <button id="lang-ru" class="lang-btn active">РУС</button>
+                <button id="lang-ky" class="lang-btn">КЫР</button>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="fines-section">
+                <h2 id="fines-common-title">Основные штрафы</h2>
+                <div class="fine-card">
+                    <h3 id="fine-1-title">Парковка в запрещенном месте</h3>
+                    <div class="fine-amount">1000 сом</div>
+                    <p id="fine-1-desc">Парковка на тротуаре, пешеходном переходе, остановке общественного транспорта</p>
+                </div>
+
+                <div class="fine-card">
+                    <h3 id="fine-2-title">Превышение времени платной парковки</h3>
+                    <div class="fine-amount">500 сом</div>
+                    <p id="fine-2-desc">Превышение оплаченного времени парковки более чем на 30 минут</p>
+                </div>
+
+                <div class="fine-card">
+                    <h3 id="fine-3-title">Парковка без оплаты</h3>
+                    <div class="fine-amount">800 сом</div>
+                    <p id="fine-3-desc">Парковка в платной зоне без оплаты</p>
+                </div>
+
+                <div class="fine-card">
+                    <h3 id="fine-4-title">Блокировка проезда</h3>
+                    <div class="fine-amount">1500 сом</div>
+                    <p id="fine-4-desc">Парковка, блокирующая проезд других автомобилей</p>
+                </div>
+            </div>
+
+            <div class="tips-section">
+                <h2 id="tips-title">Как избежать штрафов</h2>
+                <div class="tip-card">
+                    <h3 id="tip-1-title">📍 Проверяйте знаки</h3>
+                    <p id="tip-1-desc">Всегда обращайте внимание на дорожные знаки и разметку</p>
+                </div>
+
+                <div class="tip-card">
+                    <h3 id="tip-2-title">⏰ Следите за временем</h3>
+                    <p id="tip-2-desc">Используйте таймер приложения для контроля времени парковки</p>
+                </div>
+
+                <div class="tip-card">
+                    <h3 id="tip-3-title">💳 Оплачивайте заранее</h3>
+                    <p id="tip-3-desc">В платных зонах оплачивайте парковку сразу при постановке автомобиля</p>
+                </div>
+
+                <div class="tip-card">
+                    <h3 id="tip-4-title">🚫 Избегайте запрещенных зон</h3>
+                    <p id="tip-4-desc">Не паркуйтесь на тротуарах, пешеходных переходах и остановках</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/language.js"></script>
+    <script src="js/fines.js"></script>
+</body>
+</html>

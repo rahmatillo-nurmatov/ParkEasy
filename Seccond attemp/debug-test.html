@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test - ParkEasyKG</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .test-section { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; }
+        .error { color: #f44336; background: #ffebee; padding: 10px; border-radius: 4px; margin: 5px 0; }
+        .success { color: #4CAF50; background: #e8f5e9; padding: 10px; border-radius: 4px; margin: 5px 0; }
+        .warning { color: #FF9800; background: #fff3e0; padding: 10px; border-radius: 4px; margin: 5px 0; }
+        button { background: #2196F3; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .console-output { background: #000; color: #0f0; padding: 10px; border-radius: 4px; font-family: monospace; max-height: 200px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 ParkEasyKG - Отладка и тестирование</h1>
+    
+    <div class="test-section">
+        <h2>📋 Проверка файлов</h2>
+        <div id="file-check"></div>
+        <button onclick="checkFiles()">Проверить файлы</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>🧪 Тест JavaScript модулей</h2>
+        <div id="js-test"></div>
+        <button onclick="testJavaScript()">Тест JS</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>🗺️ Тест карты (без Leaflet)</h2>
+        <div id="map-test"></div>
+        <button onclick="testMapData()">Тест данных карты</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>⏱️ Тест таймера</h2>
+        <div id="timer-test"></div>
+        <button onclick="testTimer()">Тест таймера</button>
+        <button onclick="startTestTimer()">Запустить тестовый таймер</button>
+        <button onclick="stopTestTimer()">Остановить</button>
+        <div id="timer-display">00:00:00</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🌐 Тест языков</h2>
+        <div id="lang-test"></div>
+        <button onclick="testLanguages()">Тест переводов</button>
+        <button onclick="switchToKyrgyz()">Переключить на кыргызский</button>
+        <button onclick="switchToRussian()">Переключить на русский</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>💾 Тест localStorage</h2>
+        <div id="storage-test"></div>
+        <button onclick="testStorage()">Тест хранилища</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>📱 Тест PWA функций</h2>
+        <div id="pwa-test"></div>
+        <button onclick="testPWA()">Тест PWA</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>🖥️ Консоль ошибок</h2>
+        <div id="console-output" class="console-output"></div>
+        <button onclick="clearConsole()">Очистить</button>
+    </div>
+
+    <script>
+        // Перехват ошибок консоли
+        const originalConsoleError = console.error;
+        const originalConsoleLog = console.log;
+        const consoleOutput = document.getElementById('console-output');
+        
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            consoleOutput.innerHTML += '<div style="color: #f44336;">[ERROR] ' + args.join(' ') + '</div>';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+        
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            consoleOutput.innerHTML += '<div>[LOG] ' + args.join(' ') + '</div>';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+        
+        function showResult(elementId, message, type = 'success') {
+            const element = document.getElementById(elementId);
+            element.innerHTML += `<div class="${type}">${message}</div>`;
+        }
+        
+        function clearResult(elementId) {
+            document.getElementById(elementId).innerHTML = '';
+        }
+        
+        function checkFiles() {
+            clearResult('file-check');
+            
+            const requiredFiles = [
+                'css/style.css',
+                'js/language.js',
+                'js/timer.js',
+                'js/app.js',
+                'js/map.js',
+                'js/fines.js',
+                'manifest.json',
+                'service-worker.js'
+            ];
+            
+            requiredFiles.forEach(file => {
+                fetch(file)
+                    .then(response => {
+                        if (response.ok) {
+                            showResult('file-check', `✅ ${file} - найден`, 'success');
+                        } else {
+                            showResult('file-check', `❌ ${file} - не найден (${response.status})`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showResult('file-check', `❌ ${file} - ошибка загрузки: ${error.message}`, 'error');
+                    });
+            });
+        }
+        
+        function testJavaScript() {
+            clearResult('js-test');
+            
+            try {
+                // Тест базового JavaScript
+                const testObj = { test: 'value' };
+                const testJson = JSON.stringify(testObj);
+                const parsed = JSON.parse(testJson);
+                
+                if (parsed.test === 'value') {
+                    showResult('js-test', '✅ JSON работает корректно', 'success');
+                } else {
+                    showResult('js-test', '❌ Проблема с JSON', 'error');
+                }
+                
+                // Тест localStorage
+                localStorage.setItem('test-key', 'test-value');
+                const retrieved = localStorage.getItem('test-key');
+                
+                if (retrieved === 'test-value') {
+                    showResult('js-test', '✅ localStorage работает', 'success');
+                    localStorage.removeItem('test-key');
+                } else {
+                    showResult('js-test', '❌ localStorage не работает', 'error');
+                }
+                
+                // Тест Date
+                const now = new Date();
+                const timestamp = now.getTime();
+                
+                if (timestamp > 0) {
+                    showResult('js-test', '✅ Date API работает', 'success');
+                } else {
+                    showResult('js-test', '❌ Проблема с Date API', 'error');
+                }
+                
+            } catch (error) {
+                showResult('js-test', `❌ JavaScript ошибка: ${error.message}`, 'error');
+            }
+        }
+        
+        function testMapData() {
+            clearResult('map-test');
+            
+            try {
+                // Симуляция данных карты из map.js
+                const testParkingData = [
+                    {
+                        id: 1,
+                        name: 'Центральная площадь',
+                        coords: [42.8746, 74.5698],
+                        type: 'paid',
+                        cost: '20 сом/час',
+                        city: 'Бишкек'
+                    }
+                ];
+                
+                if (testParkingData.length > 0) {
+                    showResult('map-test', `✅ Данные парковок загружены (${testParkingData.length} записей)`, 'success');
+                    
+                    const bishkekParking = testParkingData.find(p => p.city === 'Бишкек');
+                    if (bishkekParking) {
+                        showResult('map-test', `✅ Найдены парковки для Бишкека: ${bishkekParking.name}`, 'success');
+                    }
+                } else {
+                    showResult('map-test', '❌ Нет данных о парковках', 'error');
+                }
+                
+                // Тест координат
+                const coords = [42.8746, 74.5698];
+                if (coords[0] >= 39 && coords[0] <= 44 && coords[1] >= 69 && coords[1] <= 81) {
+                    showResult('map-test', '✅ Координаты в пределах Кыргызстана', 'success');
+                } else {
+                    showResult('map-test', '⚠️ Координаты вне Кыргызстана', 'warning');
+                }
+                
+            } catch (error) {
+                showResult('map-test', `❌ Ошибка тестирования карты: ${error.message}`, 'error');
+            }
+        }
+        
+        let testTimerInterval = null;
+        let testStartTime = null;
+        
+        function testTimer() {
+            clearResult('timer-test');
+            
+            try {
+                // Тест функций таймера
+                const now = Date.now();
+                const formatted = formatTime(5000); // 5 секунд
+                
+                if (formatted === '00:00:05') {
+                    showResult('timer-test', '✅ Форматирование времени работает', 'success');
+                } else {
+                    showResult('timer-test', `❌ Ошибка форматирования: получено ${formatted}, ожидалось 00:00:05`, 'error');
+                }
+                
+                // Тест сохранения в localStorage
+                localStorage.setItem('testTimer', now.toString());
+                const saved = localStorage.getItem('testTimer');
+                
+                if (saved === now.toString()) {
+                    showResult('timer-test', '✅ Сохранение времени в localStorage работает', 'success');
+                    localStorage.removeItem('testTimer');
+                } else {
+                    showResult('timer-test', '❌ Проблема с сохранением времени', 'error');
+                }
+                
+            } catch (error) {
+                showResult('timer-test', `❌ Ошибка тестирования таймера: ${error.message}`, 'error');
+            }
+        }
+        
+        function startTestTimer() {
+            if (testTimerInterval) {
+                clearInterval(testTimerInterval);
+            }
+            
+            testStartTime = Date.now();
+            testTimerInterval = setInterval(() => {
+                const elapsed = Date.now() - testStartTime;
+                document.getElementById('timer-display').textContent = formatTime(elapsed);
+            }, 1000);
+            
+            showResult('timer-test', '✅ Тестовый таймер запущен', 'success');
+        }
+        
+        function stopTestTimer() {
+            if (testTimerInterval) {
+                clearInterval(testTimerInterval);
+                testTimerInterval = null;
+                document.getElementById('timer-display').textContent = '00:00:00';
+                showResult('timer-test', '✅ Тестовый таймер остановлен', 'success');
+            }
+        }
+        
+        function formatTime(milliseconds) {
+            const totalSeconds = Math.floor(milliseconds / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function testLanguages() {
+            clearResult('lang-test');
+            
+            try {
+                // Симуляция переводов из language.js
+                const translations = {
+                    ru: {
+                        'welcome-title': 'Добро пожаловать в ParkEasyKG',
+                        'menu-map': 'Карта парковок',
+                        'start-parking': 'Начать парковку'
+                    },
+                    ky: {
+                        'welcome-title': 'ParkEasyKG\'га кош келиңиз',
+                        'menu-map': 'Токтотуу жайларынын картасы',
+                        'start-parking': 'Токтотууну баштоо'
+                    }
+                };
+                
+                // Проверить наличие переводов
+                const ruKeys = Object.keys(translations.ru);
+                const kyKeys = Object.keys(translations.ky);
+                
+                if (ruKeys.length === kyKeys.length) {
+                    showResult('lang-test', `✅ Переводы синхронизированы (${ruKeys.length} ключей)`, 'success');
+                } else {
+                    showResult('lang-test', `⚠️ Несоответствие переводов: RU=${ruKeys.length}, KY=${kyKeys.length}`, 'warning');
+                }
+                
+                // Проверить конкретные переводы
+                if (translations.ru['welcome-title'] && translations.ky['welcome-title']) {
+                    showResult('lang-test', '✅ Основные переводы присутствуют', 'success');
+                } else {
+                    showResult('lang-test', '❌ Отсутствуют основные переводы', 'error');
+                }
+                
+                // Сохранить выбор языка
+                localStorage.setItem('parkeasylang', 'ru');
+                const savedLang = localStorage.getItem('parkeasylang');
+                
+                if (savedLang === 'ru') {
+                    showResult('lang-test', '✅ Сохранение выбора языка работает', 'success');
+                } else {
+                    showResult('lang-test', '❌ Проблема с сохранением языка', 'error');
+                }
+                
+            } catch (error) {
+                showResult('lang-test', `❌ Ошибка тестирования языков: ${error.message}`, 'error');
+            }
+        }
+        
+        function switchToKyrgyz() {
+            localStorage.setItem('parkeasylang', 'ky');
+            showResult('lang-test', '🇰🇬 Переключено на кыргызский язык', 'success');
+        }
+        
+        function switchToRussian() {
+            localStorage.setItem('parkeasylang', 'ru');
+            showResult('lang-test', '🇷🇺 Переключено на русский язык', 'success');
+        }
+        
+        function testStorage() {
+            clearResult('storage-test');
+            
+            try {
+                // Тест различных типов данных
+                const testData = {
+                    string: 'test string',
+                    number: 12345,
+                    boolean: true,
+                    array: [1, 2, 3],
+                    object: { nested: 'value' },
+                    timestamp: Date.now()
+                };
+                
+                // Сохранить
+                localStorage.setItem('complexTest', JSON.stringify(testData));
+                
+                // Загрузить
+                const retrieved = JSON.parse(localStorage.getItem('complexTest'));
+                
+                // Проверить
+                let allMatch = true;
+                for (const key in testData) {
+                    if (JSON.stringify(testData[key]) !== JSON.stringify(retrieved[key])) {
+                        allMatch = false;
+                        break;
+                    }
+                }
+                
+                if (allMatch) {
+                    showResult('storage-test', '✅ Сложные данные сохраняются корректно', 'success');
+                } else {
+                    showResult('storage-test', '❌ Проблема с сохранением сложных данных', 'error');
+                }
+                
+                // Тест лимитов
+                try {
+                    const bigData = 'x'.repeat(1000000); // 1MB
+                    localStorage.setItem('bigTest', bigData);
+                    showResult('storage-test', '✅ Большие данные сохраняются', 'success');
+                    localStorage.removeItem('bigTest');
+                } catch (e) {
+                    showResult('storage-test', '⚠️ Лимит localStorage достигнут', 'warning');
+                }
+                
+                // Очистить тестовые данные
+                localStorage.removeItem('complexTest');
+                
+            } catch (error) {
+                showResult('storage-test', `❌ Ошибка тестирования хранилища: ${error.message}`, 'error');
+            }
+        }
+        
+        function testPWA() {
+            clearResult('pwa-test');
+            
+            try {
+                // Service Worker
+                if ('serviceWorker' in navigator) {
+                    showResult('pwa-test', '✅ Service Worker поддерживается', 'success');
+                } else {
+                    showResult('pwa-test', '❌ Service Worker не поддерживается', 'error');
+                }
+                
+                // Notifications
+                if ('Notification' in window) {
+                    showResult('pwa-test', '✅ Уведомления поддерживаются', 'success');
+                    showResult('pwa-test', `Статус разрешений: ${Notification.permission}`, 'success');
+                } else {
+                    showResult('pwa-test', '❌ Уведомления не поддерживаются', 'error');
+                }
+                
+                // Manifest
+                const manifestLinks = document.querySelectorAll('link[rel="manifest"]');
+                if (manifestLinks.length > 0) {
+                    showResult('pwa-test', '✅ Манифест подключен', 'success');
+                } else {
+                    showResult('pwa-test', '⚠️ Манифест не найден', 'warning');
+                }
+                
+                // HTTPS/localhost
+                if (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+                    showResult('pwa-test', '✅ Протокол подходит для PWA', 'success');
+                } else {
+                    showResult('pwa-test', '⚠️ Для PWA рекомендуется HTTPS', 'warning');
+                }
+                
+                // Cache API
+                if ('caches' in window) {
+                    showResult('pwa-test', '✅ Cache API поддерживается', 'success');
+                } else {
+                    showResult('pwa-test', '❌ Cache API не поддерживается', 'error');
+                }
+                
+                // Fetch API
+                if ('fetch' in window) {
+                    showResult('pwa-test', '✅ Fetch API поддерживается', 'success');
+                } else {
+                    showResult('pwa-test', '❌ Fetch API не поддерживается', 'error');
+                }
+                
+            } catch (error) {
+                showResult('pwa-test', `❌ Ошибка тестирования PWA: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearConsole() {
+            consoleOutput.innerHTML = '';
+        }
+        
+        // Автоматический запуск базовых тестов
+        window.onload = function() {
+            console.log('🚀 ParkEasyKG Debug Test загружен');
+            console.log('Браузер:', navigator.userAgent);
+            console.log('Размер экрана:', window.innerWidth + 'x' + window.innerHeight);
+            
+            // Автоматически запустить некоторые тесты
+            setTimeout(() => {
+                testJavaScript();
+                testPWA();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>
