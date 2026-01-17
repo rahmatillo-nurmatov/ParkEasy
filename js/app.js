@@ -16,7 +16,7 @@ class ParkEasyApp {
         // Регистрация Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register('./service-worker.js')
                     .then(registration => {
                         console.log('SW registered: ', registration);
                         this.checkForUpdates(registration);
@@ -29,6 +29,7 @@ class ParkEasyApp {
         
         // Обработка события установки PWA
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
             e.preventDefault();
             this.deferredPrompt = e;
             this.showInstallButton();
@@ -47,6 +48,17 @@ class ParkEasyApp {
             installBtn.addEventListener('click', () => {
                 this.installApp();
             });
+        }
+        
+        // Проверить, уже ли установлено PWA
+        if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+            console.log('PWA уже установлено');
+            this.hideInstallButton();
+        }
+        
+        // Для iOS Safari - показать инструкции
+        if (this.isIOS() && !this.isInStandaloneMode()) {
+            this.showIOSInstallInstructions();
         }
     }
     
@@ -82,21 +94,93 @@ class ParkEasyApp {
     
     async installApp() {
         if (!this.deferredPrompt) {
-            this.showNotification('Установка недоступна', 'Приложение уже установлено или установка не поддерживается');
+            // Если нет события установки, показать инструкции
+            if (this.isIOS()) {
+                this.showIOSInstallInstructions();
+            } else {
+                this.showNotification('Установка недоступна', 'Приложение уже установлено или ваш браузер не поддерживает установку PWA');
+            }
             return;
         }
         
-        this.deferredPrompt.prompt();
-        
-        const { outcome } = await this.deferredPrompt.userChoice;
-        
-        if (outcome === 'accepted') {
-            console.log('Пользователь принял установку');
-        } else {
-            console.log('Пользователь отклонил установку');
+        try {
+            this.deferredPrompt.prompt();
+            
+            const { outcome } = await this.deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('Пользователь принял установку');
+                this.showNotification('Установка началась', 'Приложение устанавливается...');
+            } else {
+                console.log('Пользователь отклонил установку');
+            }
+            
+            this.deferredPrompt = null;
+        } catch (error) {
+            console.error('Ошибка установки:', error);
+            this.showNotification('Ошибка установки', 'Попробуйте еще раз или установите вручную через меню браузера');
         }
+    }
+    
+    isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    }
+    
+    isInStandaloneMode() {
+        return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+    }
+    
+    showIOSInstallInstructions() {
+        const instructions = document.createElement('div');
+        instructions.className = 'ios-install-instructions';
+        instructions.innerHTML = `
+            <div class="ios-install-content">
+                <h3>📱 Установка на iOS</h3>
+                <p>Для установки приложения на iPhone/iPad:</p>
+                <ol>
+                    <li>Нажмите кнопку "Поделиться" <span style="font-size: 1.2em;">⬆️</span></li>
+                    <li>Выберите "На экран Домой" <span style="font-size: 1.2em;">➕</span></li>
+                    <li>Нажмите "Добавить"</li>
+                </ol>
+                <button onclick="this.parentElement.parentElement.remove()" class="close-instructions">Понятно</button>
+            </div>
+        `;
         
-        this.deferredPrompt = null;
+        instructions.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        `;
+        
+        const content = instructions.querySelector('.ios-install-content');
+        content.style.cssText = `
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            text-align: center;
+        `;
+        
+        const closeBtn = instructions.querySelector('.close-instructions');
+        closeBtn.style.cssText = `
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 1rem;
+        `;
+        
+        document.body.appendChild(instructions);
     }
     
     setupNotifications() {

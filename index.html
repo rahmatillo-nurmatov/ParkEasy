@@ -20,19 +20,66 @@
         </header>
 
         <main class="main">
-            <div class="welcome-section">
-                <h2 id="welcome-title">Добро пожаловать в ParkEasyKG</h2>
-                <p id="welcome-text">Найдите парковку, отследите время и узнайте о штрафах в Кыргызстане</p>
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h2 id="welcome-title">Добро пожаловать в ParkEasyKG</h2>
+                    <p id="welcome-text">Найдите парковку, отследите время и узнайте о штрафах в Кыргызстане</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number">30+</span>
+                            <span class="stat-label" id="stat-parking">парковок</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label" id="stat-cities">городов</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <span class="stat-label" id="stat-support">поддержка</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="car-animation">🚗</div>
+                    <div class="parking-icon">🅿️</div>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <h3 id="features-title">Возможности приложения</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🗺️</div>
+                        <h4 id="feature-map-title">Интерактивная карта</h4>
+                        <p id="feature-map-desc">Более 30 парковок по всему Кыргызстану с актуальными ценами и правилами</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <h4 id="feature-timer-title">Умный таймер</h4>
+                        <p id="feature-timer-desc">Отслеживайте время парковки и получайте уведомления каждые 30 минут</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <h4 id="feature-fines-title">Информация о штрафах</h4>
+                        <p id="feature-fines-desc">Актуальные размеры штрафов и советы как их избежать</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h4 id="feature-lang-title">Два языка</h4>
+                        <p id="feature-lang-desc">Полная поддержка русского и кыргызского языков</p>
+                    </div>
+                </div>
             </div>
 
             <div class="menu-grid">
-                <a href="map.html" class="menu-item">
+                <a href="map.html" class="menu-item primary-action">
                     <div class="menu-icon">🗺️</div>
                     <h3 id="menu-map">Карта парковок</h3>
                     <p id="menu-map-desc">Найти парковочные места</p>
+                    <div class="action-badge">Начать поиск</div>
                 </a>
 
-                <div class="menu-item" id="timer-card">
+                <div class="menu-item timer-card" id="timer-card">
                     <div class="menu-icon">⏱️</div>
                     <h3 id="menu-timer">Таймер парковки</h3>
                     <p id="timer-status">Не активен</p>
@@ -44,13 +91,33 @@
                     <div class="menu-icon">⚠️</div>
                     <h3 id="menu-fines">Штрафы</h3>
                     <p id="menu-fines-desc">Информация о штрафах</p>
+                    <div class="info-badge">Новые данные</div>
                 </a>
 
-                <div class="menu-item" id="install-card">
+                <div class="menu-item install-card" id="install-card">
                     <div class="menu-icon">📱</div>
                     <h3 id="menu-install">Установить приложение</h3>
                     <p id="menu-install-desc">Установить на устройство</p>
                     <button id="install-btn" class="install-button" style="display: none;">Установить</button>
+                    <div class="pwa-benefits">
+                        <span>✓ Работает офлайн</span>
+                        <span>✓ Быстрый доступ</span>
+                        <span>✓ Уведомления</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonials-section">
+                <h3 id="testimonials-title">Отзывы пользователей</h3>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"Очень удобно! Больше не получаю штрафы за превышение времени парковки."</div>
+                        <div class="testimonial-author">— Айгуль, Бишкек</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-text">"Отличное приложение для туристов. Легко найти парковку в незнакомом городе."</div>
+                        <div class="testimonial-author">— Марат, Алматы</div>
+                    </div>
                 </div>
             </div>
         </main>
