@@ -37,6 +37,19 @@ class ParkingTimer {
         if (this.isActive) {
             this.stopTimer();
         } else {
+            // Если нет выбранной парковки, использовать базовые настройки
+            const selectedParking = JSON.parse(localStorage.getItem('selectedParking') || '{}');
+            if (!selectedParking.id) {
+                // Установить базовую парковку для быстрого старта
+                const defaultParking = {
+                    id: 'quick-start',
+                    name: 'Быстрый старт',
+                    type: 'paid',
+                    cost: '20 сом/час',
+                    city: 'Текущее местоположение'
+                };
+                localStorage.setItem('selectedParking', JSON.stringify(defaultParking));
+            }
             this.startTimer();
         }
     }
@@ -61,8 +74,18 @@ class ParkingTimer {
         this.updateDisplay();
         this.updateButtons();
         
-        // Показать уведомление
-        this.showNotification('Парковка началась', 'Таймер запущен');
+        // Показать уведомление с информацией о парковке
+        const selectedParking = JSON.parse(localStorage.getItem('selectedParking') || '{}');
+        const parkingName = selectedParking.name || 'Неизвестная парковка';
+        const parkingCost = selectedParking.cost || '20 сом/час';
+        
+        this.showNotification(
+            'Парковка началась', 
+            `${parkingName}\nСтоимость: ${parkingCost}`
+        );
+        
+        // Добавить визуальный эффект на кнопку
+        this.addButtonFeedback('timer-btn', 'success');
     }
     
     stopTimer() {
@@ -144,16 +167,32 @@ class ParkingTimer {
     
     updateButtons() {
         const timerBtn = document.getElementById('timer-btn');
+        const timerCard = document.getElementById('timer-card');
+        
         if (!timerBtn) return;
         
         if (this.isActive) {
             timerBtn.classList.add('active');
             timerBtn.textContent = window.langManager ? 
                 window.langManager.getText('stop-parking') : 'Остановить парковку';
+            
+            // Добавить визуальный индикатор активности
+            if (timerCard) {
+                timerCard.classList.add('timer-active');
+                timerCard.style.borderLeft = '4px solid #4CAF50';
+                timerCard.style.backgroundColor = '#f8fff8';
+            }
         } else {
             timerBtn.classList.remove('active');
             timerBtn.textContent = window.langManager ? 
                 window.langManager.getText('start-parking') : 'Начать парковку';
+            
+            // Убрать визуальный индикатор активности
+            if (timerCard) {
+                timerCard.classList.remove('timer-active');
+                timerCard.style.borderLeft = '';
+                timerCard.style.backgroundColor = '';
+            }
         }
     }
     
@@ -300,6 +339,11 @@ class ParkingTimer {
         // Получить информацию о выбранной парковке
         const selectedParking = JSON.parse(localStorage.getItem('selectedParking') || '{}');
         
+        // Обработка случаев без данных о парковке
+        if (!selectedParking || !selectedParking.type) {
+            return hours * 20; // Базовая стоимость по умолчанию
+        }
+        
         if (selectedParking.type === 'free') {
             return 0;
         }
@@ -312,20 +356,23 @@ class ParkingTimer {
         let costPerHour = 20; // сом по умолчанию
         
         // Парсинг стоимости из данных парковки
-        if (selectedParking.cost && selectedParking.cost.includes('сом')) {
+        if (selectedParking.cost && typeof selectedParking.cost === 'string' && selectedParking.cost.includes('сом')) {
             const match = selectedParking.cost.match(/(\d+)\s*сом/);
-            if (match) {
-                costPerHour = parseInt(match[1]);
+            if (match && match[1]) {
+                const parsedCost = parseInt(match[1]);
+                if (!isNaN(parsedCost) && parsedCost > 0) {
+                    costPerHour = parsedCost;
+                }
             }
         }
         
         // Если время меньше часа, все равно считаем как час
         const billableHours = Math.max(1, hours);
         
-        // Расчет итоговой стоимости
+        // Расчет итоговой стоимости с проверкой на NaN
         const totalCost = billableHours * costPerHour;
         
-        return totalCost;
+        return isNaN(totalCost) ? 0 : totalCost;
     }
     
     // Получить информацию о текущей парковке
@@ -337,6 +384,46 @@ class ParkingTimer {
     // Установить информацию о парковке
     setParkingInfo(parkingData) {
         localStorage.setItem('selectedParking', JSON.stringify(parkingData));
+    }
+    
+    // Визуальная обратная связь для кнопок
+    addButtonFeedback(buttonId, type = 'success') {
+        const button = document.getElementById(buttonId);
+        if (!button) return;
+        
+        // Добавить класс анимации
+        const feedbackClass = `feedback-${type}`;
+        button.classList.add(feedbackClass);
+        
+        // Создать стили если их нет
+        if (!document.getElementById('feedback-styles')) {
+            const style = document.createElement('style');
+            style.id = 'feedback-styles';
+            style.textContent = `
+                .feedback-success {
+                    animation: successPulse 0.6s ease-out;
+                }
+                .feedback-error {
+                    animation: errorShake 0.6s ease-out;
+                }
+                @keyframes successPulse {
+                    0% { transform: scale(1); background-color: inherit; }
+                    50% { transform: scale(1.05); background-color: #4CAF50; }
+                    100% { transform: scale(1); background-color: inherit; }
+                }
+                @keyframes errorShake {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(-5px); }
+                    75% { transform: translateX(5px); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Удалить класс через время анимации
+        setTimeout(() => {
+            button.classList.remove(feedbackClass);
+        }, 600);
     }
 }
 

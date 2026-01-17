@@ -278,42 +278,138 @@ body {
 }
 
 /* Отзывы */
-.testimonials-section {
+.reviews-section {
     padding: 2rem 1.5rem;
     background: white;
 }
 
-.testimonials-section h3 {
+.reviews-section h3 {
     text-align: center;
     color: #2196F3;
     margin-bottom: 1.5rem;
     font-size: 1.4rem;
 }
 
-.testimonials-grid {
+.reviews-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1rem;
+    margin-bottom: 2rem;
 }
 
-.testimonial-card {
+.review-card {
     background: #f8f9fa;
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 12px;
     border-left: 4px solid #2196F3;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.testimonial-text {
-    font-style: italic;
-    color: #555;
+.review-header {
+    display: flex;
+    align-items: center;
     margin-bottom: 1rem;
-    line-height: 1.4;
 }
 
-.testimonial-author {
-    font-weight: 500;
-    color: #2196F3;
+.review-avatar {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+
+.review-info h4 {
+    margin: 0 0 0.3rem 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.review-rating {
     font-size: 0.9rem;
+}
+
+.review-text {
+    color: #555;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.review-date {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.rating-summary {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 12px;
+    align-items: center;
+}
+
+.overall-rating {
+    text-align: center;
+}
+
+.rating-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #2196F3;
+    margin-bottom: 0.5rem;
+}
+
+.rating-stars {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.rating-count {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.rating-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.rating-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.rating-bar span:first-child {
+    min-width: 40px;
+}
+
+.rating-bar span:last-child {
+    min-width: 30px;
+    text-align: right;
+}
+
+.bar {
+    flex: 1;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .rating-summary {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
 }
 
 .menu-item {
@@ -622,7 +718,7 @@ body {
 }
 
 .fine-card h3, .tip-card h3 {
-    color: #333;
+    color: #2196F3;
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
     font-weight: 600;
@@ -803,6 +899,136 @@ body {
     margin: 0;
     font-size: 0.9rem;
     opacity: 0.9;
+}
+
+/* Активный таймер */
+.timer-card.timer-active {
+    animation: pulse 2s infinite;
+    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+}
+
+.timer-card.timer-active .menu-icon {
+    animation: bounce 2s infinite;
+}
+
+/* Диалоги разрешений */
+.permission-dialog .permission-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    text-align: center;
+}
+
+.permission-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.permission-content h3 {
+    color: #2196F3;
+    margin-bottom: 1rem;
+}
+
+.permission-content ul {
+    text-align: left;
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.permission-content li {
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.permission-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.allow-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    flex: 1;
+    font-size: 1rem;
+}
+
+.deny-btn {
+    background: #757575;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    flex: 1;
+    font-size: 1rem;
+}
+
+/* Инструкции по установке */
+.manual-install-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.browser-instructions {
+    text-align: left;
+    margin: 1rem 0;
+}
+
+.browser-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.browser-item strong {
+    color: #2196F3;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.browser-item ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.browser-item li {
+    margin-bottom: 0.3rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.install-benefits {
+    background: #e8f5e9;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.install-benefits h4 {
+    color: #2e7d32;
+    margin-bottom: 0.5rem;
+}
+
+.install-benefits ul {
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.install-benefits li {
+    color: #2e7d32;
+    margin-bottom: 0.3rem;
 }
 
 /* Статус сети */

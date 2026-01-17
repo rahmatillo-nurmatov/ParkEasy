@@ -54,12 +54,173 @@ class ParkEasyApp {
         if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
             console.log('PWA уже установлено');
             this.hideInstallButton();
+        } else {
+            // Показать кнопку установки для всех платформ
+            setTimeout(() => {
+                this.showInstallButtonForAllPlatforms();
+            }, 2000);
         }
         
         // Для iOS Safari - показать инструкции
         if (this.isIOS() && !this.isInStandaloneMode()) {
-            this.showIOSInstallInstructions();
+            setTimeout(() => {
+                this.showIOSInstallInstructions();
+            }, 3000);
         }
+    }
+    
+    showInstallButtonForAllPlatforms() {
+        const installBtn = document.getElementById('install-btn');
+        const installCard = document.getElementById('install-card');
+        
+        if (installBtn && !this.deferredPrompt) {
+            installBtn.style.display = 'block';
+            installBtn.textContent = this.getInstallButtonText();
+            installBtn.onclick = () => {
+                if (this.deferredPrompt) {
+                    this.installApp();
+                } else {
+                    this.showManualInstallInstructions();
+                }
+            };
+        }
+        
+        if (installCard) {
+            installCard.style.display = 'block';
+            installCard.style.opacity = '1';
+        }
+    }
+    
+    getInstallButtonText() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        
+        if (userAgent.includes('chrome') && !userAgent.includes('edg')) {
+            return 'Установить приложение';
+        } else if (userAgent.includes('firefox')) {
+            return 'Добавить на главный экран';
+        } else if (userAgent.includes('safari') && !userAgent.includes('chrome')) {
+            return 'Добавить на экран';
+        } else if (userAgent.includes('edg')) {
+            return 'Установить приложение';
+        } else {
+            return 'Установить';
+        }
+    }
+    
+    showInstallButtonFallback() {
+        const installBtn = document.getElementById('install-btn');
+        const installCard = document.getElementById('install-card');
+        
+        if (installBtn && installBtn.style.display === 'none') {
+            installBtn.style.display = 'block';
+            installBtn.textContent = 'Установить через браузер';
+            installBtn.onclick = () => {
+                this.showManualInstallInstructions();
+            };
+        }
+        
+        if (installCard) {
+            installCard.style.display = 'block';
+            const desc = installCard.querySelector('p');
+            if (desc) {
+                desc.textContent = 'Установите через меню браузера';
+            }
+        }
+    }
+    
+    showManualInstallInstructions() {
+        const instructions = document.createElement('div');
+        instructions.className = 'manual-install-instructions';
+        instructions.innerHTML = `
+            <div class="manual-install-content">
+                <h3>📱 Установка ParkEasyKG</h3>
+                <p>Выберите ваш браузер для установки приложения:</p>
+                <div class="browser-instructions">
+                    <div class="browser-item">
+                        <strong>🖥️ Windows - Chrome/Edge:</strong>
+                        <ol>
+                            <li>Нажмите на иконку "Установить" в адресной строке</li>
+                            <li>Или нажмите меню (⋮) → "Установить ParkEasyKG"</li>
+                            <li>Нажмите "Установить" в диалоге</li>
+                            <li>Приложение появится в меню "Пуск"</li>
+                        </ol>
+                    </div>
+                    <div class="browser-item">
+                        <strong>🦊 Firefox:</strong>
+                        <ol>
+                            <li>Нажмите на иконку "+" в адресной строке</li>
+                            <li>Выберите "Установить"</li>
+                            <li>Приложение добавится на рабочий стол</li>
+                        </ol>
+                    </div>
+                    <div class="browser-item">
+                        <strong>📱 Android:</strong>
+                        <ol>
+                            <li>Нажмите меню браузера (⋮)</li>
+                            <li>Выберите "Добавить на главный экран"</li>
+                            <li>Нажмите "Добавить"</li>
+                        </ol>
+                    </div>
+                    <div class="browser-item">
+                        <strong>🍎 iPhone/iPad:</strong>
+                        <ol>
+                            <li>Нажмите кнопку "Поделиться" ⬆️</li>
+                            <li>Выберите "На экран Домой"</li>
+                            <li>Нажмите "Добавить"</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="install-benefits">
+                    <h4>Преимущества установки:</h4>
+                    <ul>
+                        <li>✅ Быстрый доступ с рабочего стола</li>
+                        <li>✅ Работает без интернета</li>
+                        <li>✅ Push-уведомления о парковке</li>
+                        <li>✅ Полноэкранный режим</li>
+                    </ul>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="close-instructions">Понятно</button>
+            </div>
+        `;
+        
+        instructions.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        `;
+        
+        const content = instructions.querySelector('.manual-install-content');
+        content.style.cssText = `
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        `;
+        
+        const closeBtn = instructions.querySelector('.close-instructions');
+        closeBtn.style.cssText = `
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            font-size: 1rem;
+        `;
+        
+        document.body.appendChild(instructions);
     }
     
     showInstallButton() {
@@ -203,13 +364,16 @@ class ParkEasyApp {
     }
     
     setupNotifications() {
-        // Запросить разрешение на уведомления
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Разрешение на уведомления получено');
-                }
-            });
+        // Запросить разрешение на уведомления при первом запуске
+        if ('Notification' in window) {
+            if (Notification.permission === 'default') {
+                // Показать объяснение перед запросом разрешения
+                setTimeout(() => {
+                    this.showNotificationPermissionRequest();
+                }, 2000);
+            } else if (Notification.permission === 'granted') {
+                console.log('Разрешение на уведомления уже получено');
+            }
         }
         
         // Настроить push-уведомления (для будущих версий)
@@ -219,6 +383,66 @@ class ParkEasyApp {
                 console.log('Push-уведомления поддерживаются');
             });
         }
+    }
+    
+    showNotificationPermissionRequest() {
+        const permissionDialog = document.createElement('div');
+        permissionDialog.className = 'permission-dialog';
+        permissionDialog.innerHTML = `
+            <div class="permission-content">
+                <div class="permission-icon">🔔</div>
+                <h3>Разрешить уведомления?</h3>
+                <p>ParkEasyKG будет отправлять полезные напоминания:</p>
+                <ul>
+                    <li>⏰ Напоминания о времени парковки</li>
+                    <li>⚠️ Предупреждения о превышении времени</li>
+                    <li>💰 Уведомления о стоимости</li>
+                </ul>
+                <div class="permission-buttons">
+                    <button id="allow-notifications" class="allow-btn">Разрешить</button>
+                    <button id="deny-notifications" class="deny-btn">Не сейчас</button>
+                </div>
+            </div>
+        `;
+        
+        permissionDialog.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        `;
+        
+        const content = permissionDialog.querySelector('.permission-content');
+        content.style.cssText = `
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 400px;
+            text-align: center;
+        `;
+        
+        document.body.appendChild(permissionDialog);
+        
+        // Обработчики кнопок
+        document.getElementById('allow-notifications').addEventListener('click', () => {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    this.showNotification('Уведомления включены', 'Теперь вы будете получать полезные напоминания');
+                }
+                permissionDialog.remove();
+            });
+        });
+        
+        document.getElementById('deny-notifications').addEventListener('click', () => {
+            permissionDialog.remove();
+        });
     }
     
     setupOfflineHandling() {
