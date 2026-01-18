@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ParkEasyKG - Парковки Кыргызстана</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=5.0">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2196F3">
     <link rel="icon" type="image/svg+xml" href="icons/icon-192x192.svg">
@@ -16,9 +16,12 @@
     <div class="app">
         <header class="header">
             <h1 id="app-title">ParkEasyKG</h1>
-            <div class="language-switcher">
-                <button id="lang-ru" class="lang-btn active">РУС</button>
-                <button id="lang-ky" class="lang-btn">КЫР</button>
+            <div class="header-controls">
+                <button id="theme-toggle" class="theme-btn" title="Переключить тему">🌙</button>
+                <div class="language-switcher">
+                    <button id="lang-ru" class="lang-btn active">РУС</button>
+                    <button id="lang-ky" class="lang-btn">КЫР</button>
+                </div>
             </div>
         </header>
 
@@ -80,6 +83,7 @@
                     <h3 id="menu-install">Установить приложение</h3>
                     <p id="menu-install-desc">Установить на устройство</p>
                     <button id="install-btn" class="install-button" style="display: none;">Установить</button>
+                    <button id="test-notification" class="install-button" style="margin-top: 0.5rem;">Тест уведомлений</button>
                     <div class="pwa-benefits">
                         <span>✓ Работает офлайн</span>
                         <span>✓ Быстрый доступ</span>
@@ -133,6 +137,8 @@
     <script src="js/language.js"></script>
     <script src="js/timer.js"></script>
     <script src="js/reviews.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/notifications.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

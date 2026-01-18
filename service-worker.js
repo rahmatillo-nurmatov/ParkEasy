@@ -1,7 +1,7 @@
 // Service Worker для ParkEasyKG
-const CACHE_NAME = 'parkeasylg-v1.0.0';
-const STATIC_CACHE = 'parkeasylg-static-v1.0.0';
-const DYNAMIC_CACHE = 'parkeasylg-dynamic-v1.0.0';
+const CACHE_NAME = 'parkeasylg-v1.2.0';
+const STATIC_CACHE = 'parkeasylg-static-v1.2.0';
+const DYNAMIC_CACHE = 'parkeasylg-dynamic-v1.2.0';
 
 // Файлы для кэширования
 const STATIC_FILES = [
@@ -15,6 +15,9 @@ const STATIC_FILES = [
   './js/timer.js',
   './js/map.js',
   './js/fines.js',
+  './js/reviews.js',
+  './js/theme.js',
+  './js/notifications.js',
   './manifest.json',
   // Leaflet CSS и JS будут кэшироваться динамически
 ];

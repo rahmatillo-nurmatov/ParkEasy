@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Штрафы - ParkEasyKG</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=5.0">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2196F3">
 </head>
@@ -13,9 +13,12 @@
         <header class="header">
             <button class="back-btn" onclick="history.back()">←</button>
             <h1 id="fines-title">Штрафы за парковку</h1>
-            <div class="language-switcher">
-                <button id="lang-ru" class="lang-btn active">РУС</button>
-                <button id="lang-ky" class="lang-btn">КЫР</button>
+            <div class="header-controls">
+                <button id="theme-toggle" class="theme-btn" title="Переключить тему">🌙</button>
+                <div class="language-switcher">
+                    <button id="lang-ru" class="lang-btn active">РУС</button>
+                    <button id="lang-ky" class="lang-btn">КЫР</button>
+                </div>
             </div>
         </header>
 
@@ -36,7 +39,7 @@
                             <div class="fine-amount severe">1000 сом</div>
                         </div>
                     </div>
-                    <p id="fine-1-desc">Парковка на тротуаре, пешеходном переходе, остановке общественного транспорта, в местах для инвалидов без соответствующего разрешения</p>
+                    <p id="fine-1-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Парковка на тротуаре, пешеходном переходе, остановке общественного транспорта, в местах для инвалидов без соответствующего разрешения</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 124, часть 1
@@ -55,7 +58,7 @@
                             <div class="fine-amount moderate">500 сом</div>
                         </div>
                     </div>
-                    <p id="fine-2-desc">Превышение оплаченного времени парковки более чем на 30 минут в зонах платной парковки</p>
+                    <p id="fine-2-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Превышение оплаченного времени парковки более чем на 30 минут в зонах платной парковки</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 124, часть 2
@@ -74,7 +77,7 @@
                             <div class="fine-amount moderate">800 сом</div>
                         </div>
                     </div>
-                    <p id="fine-3-desc">Парковка в платной зоне без оплаты или с недействительным талоном</p>
+                    <p id="fine-3-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Парковка в платной зоне без оплаты или с недействительным талоном</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 124, часть 3
@@ -93,7 +96,7 @@
                             <div class="fine-amount severe">1500 сом</div>
                         </div>
                     </div>
-                    <p id="fine-4-desc">Парковка, блокирующая проезд других автомобилей, въезды во дворы, пожарные проезды</p>
+                    <p id="fine-4-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Парковка, блокирующая проезд других автомобилей, въезды во дворы, пожарные проезды</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 124, часть 4
@@ -112,7 +115,7 @@
                             <div class="fine-amount moderate">800 сом</div>
                         </div>
                     </div>
-                    <p id="fine-5-desc">Парковка на зеленых насаждениях, газонах, в парках и скверах</p>
+                    <p id="fine-5-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Парковка на зеленых насаждениях, газонах, в парках и скверах</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 125, часть 1
@@ -131,7 +134,7 @@
                             <div class="fine-amount critical">2000 сом</div>
                         </div>
                     </div>
-                    <p id="fine-6-desc">Парковка в местах, предназначенных для людей с ограниченными возможностями, без соответствующего разрешения</p>
+                    <p id="fine-6-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Парковка в местах, предназначенных для людей с ограниченными возможностями, без соответствующего разрешения</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 124, часть 5
@@ -150,7 +153,7 @@
                             <div class="fine-amount severe">1200 сом</div>
                         </div>
                     </div>
-                    <p id="fine-7-desc">Парковка на остановках общественного транспорта и ближе 15 метров от них</p>
+                    <p id="fine-7-desc" style="color: #000 !important; font-weight: 700 !important; font-size: 1.1rem !important; opacity: 1 !important;">Парковка на остановках общественного транспорта и ближе 15 метров от них</p>
                     <div class="fine-details">
                         <div class="detail-item">
                             <strong>Статья КоАП КР:</strong> Статья 124, часть 6
@@ -193,19 +196,19 @@
                     <div class="tip-card">
                         <div class="tip-icon">📍</div>
                         <h3 id="tip-1-title">Проверяйте знаки</h3>
-                        <p id="tip-1-desc">Всегда обращайте внимание на дорожные знаки и разметку перед парковкой</p>
+                        <p id="tip-1-desc" style="color: #000 !important; font-weight: 600 !important; font-size: 1rem !important; opacity: 1 !important;">Всегда обращайте внимание на дорожные знаки и разметку перед парковкой</p>
                     </div>
 
                     <div class="tip-card">
                         <div class="tip-icon">⏰</div>
                         <h3 id="tip-2-title">Следите за временем</h3>
-                        <p id="tip-2-desc">Используйте таймер приложения для контроля времени парковки</p>
+                        <p id="tip-2-desc" style="color: #000 !important; font-weight: 600 !important; font-size: 1rem !important; opacity: 1 !important;">Используйте таймер приложения для контроля времени парковки</p>
                     </div>
 
                     <div class="tip-card">
                         <div class="tip-icon">💳</div>
                         <h3 id="tip-3-title">Оплачивайте заранее</h3>
-                        <p id="tip-3-desc">В платных зонах оплачивайте парковку сразу при постановке автомобиля</p>
+                        <p id="tip-3-desc" style="color: #000 !important; font-weight: 600 !important; font-size: 1rem !important; opacity: 1 !important;">В платных зонах оплачивайте парковку сразу при постановке автомобиля</p>
                     </div>
 
                     <div class="tip-card">
@@ -239,6 +242,8 @@
     </div>
 
     <script src="js/language.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/notifications.js"></script>
     <script src="js/fines.js"></script>
 </body>
 </html>

@@ -1489,8 +1489,13 @@ class ParkingMap {
         
         // Добавить маркеры на карту
         this.addMarkersToMap();
-        this.setupSearch();
-        this.setupFilters();
+        
+        // Настроить поиск и фильтры после загрузки данных
+        setTimeout(() => {
+            this.setupSearch();
+            this.setupFilters();
+            console.log('Поиск и фильтры настроены');
+        }, 500);
     }
     
     // Настройка поиска
@@ -1498,20 +1503,29 @@ class ParkingMap {
         const searchInput = document.getElementById('parking-search');
         const searchBtn = document.getElementById('search-btn');
         
+        console.log('Настройка поиска:', { searchInput, searchBtn });
+        
         if (searchInput && searchBtn) {
             searchInput.addEventListener('input', (e) => {
+                console.log('Поиск по вводу:', e.target.value);
                 this.searchParkings(e.target.value);
             });
             
             searchBtn.addEventListener('click', () => {
+                console.log('Клик по кнопке поиска:', searchInput.value);
                 this.searchParkings(searchInput.value);
             });
             
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
+                    console.log('Enter в поиске:', searchInput.value);
                     this.searchParkings(searchInput.value);
                 }
             });
+            
+            console.log('Поиск настроен успешно');
+        } else {
+            console.error('Элементы поиска не найдены!');
         }
     }
     
@@ -1519,8 +1533,14 @@ class ParkingMap {
     setupFilters() {
         const filterBtns = document.querySelectorAll('.filter-btn');
         
-        filterBtns.forEach(btn => {
+        console.log('Настройка фильтров:', filterBtns.length, 'кнопок найдено');
+        
+        filterBtns.forEach((btn, index) => {
+            console.log(`Кнопка ${index}:`, btn.textContent, btn.dataset.filter);
+            
             btn.addEventListener('click', (e) => {
+                console.log('Клик по фильтру:', e.target.dataset.filter);
+                
                 // Убрать активный класс у всех кнопок
                 filterBtns.forEach(b => b.classList.remove('active'));
                 // Добавить активный класс к нажатой кнопке
@@ -1530,11 +1550,16 @@ class ParkingMap {
                 this.filterParkings(filter);
             });
         });
+        
+        console.log('Фильтры настроены успешно');
     }
     
     // Поиск парковок
     searchParkings(query) {
+        console.log('Выполняется поиск:', query);
+        
         if (!query.trim()) {
+            console.log('Пустой запрос, показываем все маркеры');
             this.showAllMarkers();
             return;
         }
@@ -1546,6 +1571,8 @@ class ParkingMap {
                    parking.city.toLowerCase().includes(searchQuery);
         });
         
+        console.log(`Найдено ${filteredData.length} парковок по запросу "${query}"`);
+        
         this.updateMarkersVisibility(filteredData);
         
         if (filteredData.length === 0) {
@@ -1555,6 +1582,8 @@ class ParkingMap {
     
     // Фильтрация парковок
     filterParkings(filter) {
+        console.log('Применяется фильтр:', filter);
+        
         let filteredData;
         
         switch (filter) {
@@ -1572,6 +1601,8 @@ class ParkingMap {
                 filteredData = this.parkingData;
                 break;
         }
+        
+        console.log(`Отфильтровано ${filteredData.length} парковок по фильтру "${filter}"`);
         
         this.updateMarkersVisibility(filteredData);
     }

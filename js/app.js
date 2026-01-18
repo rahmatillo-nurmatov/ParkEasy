@@ -50,6 +50,14 @@ class ParkEasyApp {
             });
         }
         
+        // Кнопка тестирования уведомлений
+        const testNotificationBtn = document.getElementById('test-notification');
+        if (testNotificationBtn) {
+            testNotificationBtn.addEventListener('click', () => {
+                this.testNotification();
+            });
+        }
+        
         // Проверить, уже ли установлено PWA
         if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
             console.log('PWA уже установлено');
@@ -299,6 +307,48 @@ class ParkEasyApp {
         } catch (error) {
             console.error('Ошибка установки:', error);
             this.showNotification('Ошибка установки', 'Попробуйте установить через меню браузера: Меню → Установить приложение');
+        }
+    }
+    
+    testNotification() {
+        console.log('Тестирование уведомлений...');
+        
+        if (!('Notification' in window)) {
+            this.showNotification('Ошибка', 'Ваш браузер не поддерживает уведомления');
+            return;
+        }
+        
+        if (Notification.permission === 'granted') {
+            // Показать тестовое уведомление
+            if (window.notificationManager) {
+                window.notificationManager.showParkingTip();
+                this.showNotification('Тест успешен', 'Уведомление отправлено! Проверьте системные уведомления.');
+            } else {
+                // Fallback - создать уведомление напрямую
+                const notification = new Notification('🅿️ Тест уведомлений ParkEasyKG', {
+                    body: 'Уведомления работают корректно! Теперь вы будете получать полезные советы по парковке.',
+                    icon: 'icons/icon-192x192.svg',
+                    badge: 'icons/icon-192x192.svg',
+                    tag: 'test-notification'
+                });
+                
+                setTimeout(() => {
+                    notification.close();
+                }, 5000);
+                
+                this.showNotification('Тест успешен', 'Уведомление отправлено!');
+            }
+        } else if (Notification.permission === 'default') {
+            // Запросить разрешение
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    this.testNotification(); // Повторить тест после получения разрешения
+                } else {
+                    this.showNotification('Разрешение отклонено', 'Для получения уведомлений разрешите их в настройках браузера');
+                }
+            });
+        } else {
+            this.showNotification('Разрешение отклонено', 'Уведомления заблокированы. Разрешите их в настройках браузера');
         }
     }
     

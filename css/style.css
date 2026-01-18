@@ -7,7 +7,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #ffffff;
     min-height: 100vh;
     color: #333;
 }
@@ -15,7 +15,7 @@ body {
 .app {
     max-width: 400px;
     margin: 0 auto;
-    background: white;
+    background: #ffffff;
     min-height: 100vh;
     box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
@@ -54,6 +54,33 @@ body {
 }
 
 /* Переключатель языка */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.theme-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
 .language-switcher {
     display: flex;
     gap: 0.5rem;
@@ -200,7 +227,7 @@ body {
 }
 
 .feature-card p {
-    color: #666;
+    color: #555;
     font-size: 0.9rem;
     line-height: 1.4;
 }
@@ -277,17 +304,18 @@ body {
     font-weight: 500;
 }
 
-/* Отзывы */
+/* Отзывы - СОВРЕМЕННЫЙ СТИЛЬ 2GIS */
 .reviews-section {
     padding: 2rem 1.5rem;
-    background: white;
+    background: #f8f9fa;
 }
 
 .reviews-section h3 {
     text-align: center;
-    color: #2196F3;
-    margin-bottom: 1.5rem;
-    font-size: 1.4rem;
+    color: #4CAF50;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
 .reviews-grid {
@@ -405,19 +433,21 @@ body {
     transition: width 0.3s ease;
 }
 
-/* Форма добавления отзыва */
+/* Форма добавления отзыва - СОВРЕМЕННЫЙ ДИЗАЙН */
 .add-review-form {
-    background: #f8f9fa;
-    padding: 1.5rem;
+    background: white;
+    padding: 2rem;
     border-radius: 12px;
     margin-bottom: 2rem;
     border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
 .add-review-form h4 {
-    color: #2196F3;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+    color: #4CAF50;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
 .form-group {
@@ -438,8 +468,8 @@ body {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #2196F3;
-    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
 }
 
 .form-group textarea {
@@ -548,7 +578,7 @@ body {
 }
 
 .menu-item p {
-    color: #666;
+    color: #555;
     font-size: 0.9rem;
     margin-bottom: 1rem;
 }
@@ -664,11 +694,17 @@ body {
     border-radius: 6px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    min-width: 40px;
 }
 
 .search-btn:hover {
     background: #388E3C;
+    transform: scale(1.05);
+}
+
+.search-btn:active {
+    transform: scale(0.95);
 }
 
 .filters-container {
@@ -686,6 +722,7 @@ body {
     cursor: pointer;
     font-size: 0.8rem;
     transition: all 0.2s;
+    user-select: none;
 }
 
 .filter-btn.active,
@@ -693,6 +730,11 @@ body {
     background: #4CAF50;
     color: white;
     border-color: #4CAF50;
+    transform: scale(1.05);
+}
+
+.filter-btn:active {
+    transform: scale(0.95);
 }
 
 .legend {
@@ -795,7 +837,7 @@ body {
 .rules-text {
     font-size: 0.85rem;
     line-height: 1.3;
-    color: #666;
+    color: #555;
 }
 
 .type-badge {
@@ -836,24 +878,27 @@ body {
 }
 
 .fines-hero p {
-    opacity: 0.9;
     font-size: 1rem;
+    color: white;
+    font-weight: 500;
 }
 
 .fines-section, .tips-section, .payment-info-section {
     margin-bottom: 2rem;
     padding: 0 1.5rem;
+    background: #ffffff;
 }
 
 .fines-section h2, .tips-section h2, .payment-info-section h2 {
-    color: #2196F3;
+    color: #4CAF50;
     margin-bottom: 1.5rem;
     font-size: 1.4rem;
     text-align: center;
+    font-weight: 600;
 }
 
 .fine-card, .tip-card {
-    background: white;
+    background: #ffffff !important;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     padding: 1.5rem;
@@ -885,7 +930,7 @@ body {
 }
 
 .fine-card h3, .tip-card h3 {
-    color: #2196F3;
+    color: #4CAF50;
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
     font-weight: 600;
@@ -916,23 +961,51 @@ body {
 }
 
 .fine-card p, .tip-card p {
-    color: #666;
+    color: #333;
     font-size: 0.95rem;
     line-height: 1.5;
     margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+/* Специальные стили для описаний штрафов */
+p[id*="fine-"][id*="-desc"] {
+    color: #222 !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    line-height: 1.6 !important;
+    margin-bottom: 1.2rem !important;
 }
 
 .fine-details {
-    background: #f8f9fa;
+    background: #ffffff !important;
     padding: 1rem;
     border-radius: 8px;
-    border-left: 4px solid #2196F3;
+    border-left: 4px solid #4CAF50;
+    border: 1px solid #e0e0e0;
 }
 
 .detail-item {
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
-    color: #555;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Усиленные стили для деталей штрафов */
+.fine-details .detail-item {
+    color: #000 !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.8rem !important;
+    background: #ffffff;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.fine-details .detail-item strong {
+    color: #4CAF50 !important;
+    font-weight: 700 !important;
 }
 
 .detail-item:last-child {
@@ -947,7 +1020,7 @@ body {
 }
 
 .payment-card {
-    background: white;
+    background: #ffffff !important;
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     padding: 1.5rem;
@@ -955,9 +1028,10 @@ body {
 }
 
 .payment-card h3 {
-    color: #2196F3;
+    color: #4CAF50;
     margin-bottom: 1rem;
     font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .payment-card ul {
@@ -968,7 +1042,8 @@ body {
 .payment-card li {
     padding: 0.5rem 0;
     border-bottom: 1px solid #f0f0f0;
-    color: #666;
+    color: #333;
+    font-weight: 500;
 }
 
 .payment-card li:last-child {
@@ -993,23 +1068,26 @@ body {
 
 /* Правовая информация */
 .legal-info {
-    background: #f8f9fa;
+    background: #ffffff !important;
     padding: 1.5rem;
     border-radius: 8px;
     margin: 2rem 1.5rem;
-    border-left: 4px solid #2196F3;
+    border-left: 4px solid #4CAF50;
+    border: 1px solid #e0e0e0;
 }
 
 .legal-info h3 {
-    color: #2196F3;
+    color: #4CAF50;
     margin-bottom: 1rem;
+    font-weight: 600;
 }
 
 .legal-info p {
-    color: #666;
+    color: #333;
     font-size: 0.9rem;
     line-height: 1.5;
     margin-bottom: 0.5rem;
+    font-weight: 500;
 }
 
 /* Адаптивность */
@@ -1333,6 +1411,101 @@ body {
     animation: pulse 2s infinite;
 }
 
+/* Темная тема */
+body.dark-theme {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-theme .app {
+    background: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-theme .header {
+    background: #2d2d2d;
+}
+
+body.dark-theme .fine-card, 
+body.dark-theme .tip-card,
+body.dark-theme .payment-card {
+    background: #2d2d2d !important;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+body.dark-theme .fine-details {
+    background: #333333 !important;
+    border-color: #404040;
+}
+
+body.dark-theme .legal-info {
+    background: #2d2d2d !important;
+    border-color: #404040;
+}
+
+body.dark-theme .fine-card p, 
+body.dark-theme .tip-card p {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme .detail-item {
+    color: #e0e0e0 !important;
+    background: #404040;
+}
+
+body.dark-theme .legal-info p {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme .payment-card li {
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme .hero-section {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1e1e1e 100%);
+}
+
+body.dark-theme .features-section {
+    background: #1e1e1e;
+}
+
+body.dark-theme .feature-card {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+body.dark-theme .menu-item {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+body.dark-theme .reviews-section {
+    background: #1e1e1e;
+}
+
+body.dark-theme .add-review-form {
+    background: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-theme .review-card {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: #e0e0e0;
+}
+
+body.dark-theme .theme-btn {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+}
+
+body.dark-theme .theme-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
 /* Темная тема для системных настроек */
 @media (prefers-color-scheme: dark) {
     body {
@@ -1427,4 +1600,83 @@ body {
         height: calc(100vh - 100px);
         min-height: calc(100vh - 100px);
     }
+}
+
+/* Темная тема для карты */
+body.dark-theme .map-controls.gis-style {
+    background: #2d2d2d !important;
+    border-color: #404040;
+}
+
+body.dark-theme .search-input {
+    background: #404040 !important;
+    color: #e0e0e0 !important;
+    border-color: #555;
+}
+
+body.dark-theme .search-input::placeholder {
+    color: #aaa !important;
+}
+
+body.dark-theme .search-btn {
+    background: #404040 !important;
+    color: #e0e0e0 !important;
+    border-color: #555;
+}
+
+body.dark-theme .filter-btn {
+    background: #404040 !important;
+    color: #e0e0e0 !important;
+    border-color: #555;
+}
+
+body.dark-theme .filter-btn.active {
+    background: #4CAF50 !important;
+    color: white !important;
+}
+
+body.dark-theme .legend {
+    background: #2d2d2d !important;
+    border-color: #404040;
+}
+
+body.dark-theme .parking-info {
+    background: #2d2d2d !important;
+    color: #e0e0e0 !important;
+    border-color: #404040;
+}
+
+body.dark-theme .primary-btn {
+    background: #4CAF50 !important;
+    color: white !important;
+}
+
+body.dark-theme .secondary-btn {
+    background: #404040 !important;
+    color: #e0e0e0 !important;
+    border-color: #555;
+}
+
+/* Темная тема для Leaflet карты */
+body.dark-theme .leaflet-container {
+    background: #2d2d2d !important;
+}
+
+body.dark-theme .leaflet-popup-content-wrapper {
+    background: #2d2d2d !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-theme .leaflet-popup-tip {
+    background: #2d2d2d !important;
+}
+
+body.dark-theme .leaflet-control-zoom a {
+    background: #404040 !important;
+    color: #e0e0e0 !important;
+    border-color: #555;
+}
+
+body.dark-theme .leaflet-control-zoom a:hover {
+    background: #555 !important;
 }
